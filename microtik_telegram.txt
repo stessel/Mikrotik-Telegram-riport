@@ -1,0 +1,19 @@
+:local botToken "TOKEN"
+:local chatId "ID"
+
+:local rname [/system identity get name]
+:local cpu [/system resource get cpu-load]
+:local rosver [/system resource get version]
+:local uptime [/system resource get uptime]
+
+:local totalMem [/system resource get total-memory]
+:local freeMem [/system resource get free-memory]
+:local usedMem (($totalMem - $freeMem) * 100 / $totalMem)
+
+:local msg ("ONLINE OK - " . $rname . " CPU:" . $cpu . "% OS:" . $rosver . " RAM:" . $usedMem . "% Uptime:" . $uptime)
+
+/tool fetch \
+url="https://api.telegram.org/bot$botToken/sendMessage" \
+http-method=post \
+http-data=("chat_id=$chatId&text=" . $msg) \
+keep-result=no
